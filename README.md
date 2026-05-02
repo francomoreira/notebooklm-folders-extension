@@ -8,6 +8,10 @@
 
 ---
 
+![Texto alternativo descriptivo](https://raw.githubusercontent.com/francomoreira/notebooklm-folders-extension/refs/heads/main/video1.gif)
+
+---
+
 ## ✨ Features
 
 - 📂 **Carpetas virtuales** - Organiza fuentes en categorías
@@ -203,6 +207,12 @@ Ver [LICENSE](LICENSE) para detalles.
 
 - **Desarrollado con:** Claude Sonnet 4.5 (Anthropic)
 - **Inspiración:** Necesidad personal de organizar documentos en NotebookLM
+
+---
+
+![Texto alternativo descriptivo](https://raw.githubusercontent.com/francomoreira/notebooklm-folders-extension/refs/heads/main/video1.gif)
+
+---
 
 ---
 
