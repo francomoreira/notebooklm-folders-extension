@@ -1,5 +1,19 @@
 # Changelog — NotebookLM Folders
 
+## v1.5.1 — 2026-05-02
+
+### Bug corregido
+
+**[CRÍTICO] Loop infinito de re-inyección + parpadeo permanente**
+- **Síntoma:** la UI se redibujaba sin parar, generando parpadeo y un `TypeError: Cannot read properties of null (reading 'addEventListener')` en bucle.
+- **Causa:** `findSourcesList()` buscaba `.single-source-container` en todo el documento. Como los clones que metemos dentro de las carpetas también tienen esa clase, el selector terminaba devolviendo el padre de un clon (`.nbm-source-item`) como si fuera la lista real. El `MutationObserver` veía el cambio de `boundTo` y reinyectaba, generando más mutaciones, retroalimentando el loop.
+- **Fix:**
+  - `findSourcesList()` ahora ignora cualquier `.single-source-container` que esté dentro de `#nbm-folders-container`.
+  - Guard `injecting` que bloquea reentrada de `createFolderUI` mientras una inyección está en curso.
+  - El observer se **desconecta** durante la inyección y se reconecta al terminar, así no se dispara por nuestras propias mutaciones.
+
+---
+
 ## v1.5 — 2026-05-02
 
 ### Bugs corregidos

@@ -11,6 +11,7 @@
   let observer = null;
   let observerDebounce = null;
   let dragDropInitialized = false;
+  let injecting = false;
 
   function getNotebookId() {
     const match = window.location.pathname.match(/\/notebook\/([^/]+)/);
@@ -44,11 +45,15 @@
     return txt ? txt.slice(0, 200) : null;
   }
 
-  // Padre real de los .single-source-container
+  // Padre real de los .single-source-container (ignorando los clones que viven dentro de la UI propia)
   function findSourcesList() {
     const items = document.querySelectorAll(SOURCE_ITEM_SELECTOR);
-    if (items.length === 0) return null;
-    return items[0].parentElement;
+    for (const item of items) {
+      if (!item.closest('#nbm-folders-container')) {
+        return item.parentElement;
+      }
+    }
+    return null;
   }
 
   function getElementPath(el) {
@@ -62,8 +67,20 @@
   }
 
   function createFolderUI() {
+    if (injecting) return false;
     const sourcesContainer = findSourcesList();
     if (!sourcesContainer) return false;
+    injecting = true;
+    if (observer) observer.disconnect();
+    try {
+      return doInject(sourcesContainer);
+    } finally {
+      injecting = false;
+      if (observer) observer.observe(document.body, { childList: true, subtree: true });
+    }
+  }
+
+  function doInject(sourcesContainer) {
 
     const existing = document.getElementById('nbm-folders-container');
     if (existing && existing.dataset.boundTo === getElementPath(sourcesContainer)) {
