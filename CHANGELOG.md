@@ -1,5 +1,27 @@
 # Changelog — NotebookLM Folders
 
+## v1.5 — 2026-05-02
+
+### Bugs corregidos
+
+**[CRÍTICO] La extensión apuntaba al contenedor equivocado**
+- **Síntoma:** se pintaba la UI de carpetas pero los documentos seguían visibles abajo, sin entrar a las carpetas. El folder "Sin asignar" salía vacío y el drag no levantaba ningún `DRAGSTART` en la consola.
+- **Causa:** el selector `[role="list"]` matcheaba un contenedor genérico (no la lista real de fuentes). La lista verdadera está hecha de elementos `.single-source-container`, cada uno con un `<button aria-label="nombre-archivo">`.
+- **Fix:** nuevo selector `SOURCE_ITEM_SELECTOR = '.single-source-container'`. `findSourcesList()` ahora busca el padre real de esos elementos. `getSourceId()` usa el `aria-label` del botón interno como ID estable (antes usaba `textContent`, que era frágil).
+
+**[CRÍTICO] La UI desaparecía al cambiar de pestaña en vista angosta**
+- **Síntoma:** en ventana angosta con tabs Fuentes/Chat/Studio, al volver a Fuentes las carpetas no estaban.
+- **Causa:** Angular remonta el panel de Fuentes y el script solo corría una vez al cargar la página.
+- **Fix:** `MutationObserver` en `document.body` con debounce de 250 ms. Detecta cuando el contenedor de fuentes aparece, cambia o reaparece sin la UI de carpetas, y re-inyecta. También vuelve a esconder la lista original si Angular la re-mostró.
+
+### Mejoras
+
+- Inyección **idempotente**: `dataset.boundTo` rastrea a qué contenedor está atada la UI; si ya está atada al correcto, no se reinyecta (solo asegura que la lista original siga oculta).
+- **Limpieza de IDs huérfanos**: al inyectar, elimina de `folderStructure` cualquier ID que ya no exista en NotebookLM (fuentes borradas).
+- **Clones sin `draggable`**: al clonar las fuentes para meterlas en folders, se les quita el atributo `draggable` original de NotebookLM para evitar conflictos.
+
+---
+
 ## v1.4 — 2026-05-02
 
 ### Bugs corregidos
