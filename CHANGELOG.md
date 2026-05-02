@@ -1,5 +1,13 @@
 # Changelog — NotebookLM Folders
 
+## v1.6.2 — 2026-05-02
+
+### Mejora de UX
+
+- En vista lista, ocultar también el botón "+ Nueva Carpeta" (no tiene sentido crear carpetas cuando la UI de carpetas está oculta).
+
+---
+
 ## v1.6.1 — 2026-05-02
 
 ### Bug corregido

@@ -380,15 +380,18 @@
   function toggleView() {
     const wrapper = document.getElementById('nbm-folders-wrapper');
     const original = findSourcesList();
+    const addBtn = document.getElementById('nbm-add-folder');
     listViewMode = !listViewMode;
     if (listViewMode) {
-      // Vista lista: ocultar carpetas, mostrar lista original
+      // Vista lista: ocultar carpetas + botón nueva carpeta, mostrar lista original
       wrapper.style.display = 'none';
+      if (addBtn) addBtn.style.display = 'none';
       if (original) original.style.display = '';
       document.getElementById('nbm-toggle-view').textContent = '📋 Vista Lista';
     } else {
-      // Vista carpetas: mostrar carpetas, ocultar lista original
+      // Vista carpetas: mostrar todo, ocultar lista original
       wrapper.style.display = '';
+      if (addBtn) addBtn.style.display = '';
       if (original) original.style.display = 'none';
       document.getElementById('nbm-toggle-view').textContent = '📁 Vista Carpetas';
     }
