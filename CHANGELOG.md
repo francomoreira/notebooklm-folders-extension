@@ -1,5 +1,20 @@
 # Changelog — NotebookLM Folders
 
+## v1.6 — 2026-05-02
+
+### Mejoras de UX
+
+**Folders mantienen su estado al hacer drop**
+- **Antes:** después de mover un doc, `refreshUI()` reconstruía todo desde cero y todas las carpetas quedaban colapsadas. Había que volver a abrirlas.
+- **Ahora:** un `Set openFolders` recuerda qué carpetas están abiertas. `createFolder()` arranca cada folder en su estado previo. Al hacer drop, el folder destino se agrega automáticamente al set para abrirse si estaba cerrado.
+
+**Botón "tildar todo el folder" (☑) en cada header**
+- Tilda todos los checkboxes de los docs del folder en NotebookLM. Si todos ya están tildados, los destilda.
+- Internamente: `findOriginalContainer(sourceId)` ubica el `.single-source-container` original (no clones) por `aria-label`, y `getCheckboxInfo()` busca el checkbox real (`[role="checkbox"]`, `mat-checkbox`, o `input[type="checkbox"]`) y lee su estado vía `aria-checked`.
+- Esto resuelve la limitación de que los checkboxes visibles en los clones de las carpetas no propagan clic al original — ahora el botón del folder hace de puente.
+
+---
+
 ## v1.5.1 — 2026-05-02
 
 ### Bug corregido

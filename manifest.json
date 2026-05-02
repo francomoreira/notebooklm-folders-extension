@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "NotebookLM Folders",
-  "version": "1.5.1",
+  "version": "1.6.0",
   "description": "Organiza tus fuentes de NotebookLM en carpetas virtuales",
   "permissions": ["storage"],
   "host_permissions": [

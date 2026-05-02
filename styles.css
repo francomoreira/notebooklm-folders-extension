@@ -152,6 +152,7 @@
   text-align: center;
 }
 
+.nbm-select-all,
 .nbm-delete-folder {
   background: none;
   border: none;
@@ -161,6 +162,12 @@
   border-radius: 4px;
   opacity: 0.6;
   transition: all 0.2s;
+  color: var(--nbm-text-primary);
+}
+
+.nbm-select-all:hover {
+  opacity: 1;
+  background: var(--nbm-accent-light);
 }
 
 .nbm-delete-folder:hover {

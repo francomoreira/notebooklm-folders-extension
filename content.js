@@ -12,6 +12,7 @@
   let observerDebounce = null;
   let dragDropInitialized = false;
   let injecting = false;
+  let openFolders = new Set();
 
   function getNotebookId() {
     const match = window.location.pathname.match(/\/notebook\/([^/]+)/);
@@ -169,18 +170,21 @@
     folder.className = 'nbm-folder';
     folder.dataset.folderName = name;
 
+    const isOpen = openFolders.has(name);
+
     const header = document.createElement('div');
     header.className = 'nbm-folder-header';
     header.innerHTML = `
-      <span class="nbm-folder-toggle">▶</span>
+      <span class="nbm-folder-toggle">${isOpen ? '▼' : '▶'}</span>
       <input type="text" class="nbm-folder-name" value="${escapeAttr(name)}" ${isUnassigned ? 'readonly' : ''}>
       <span class="nbm-folder-count">${sources.length}</span>
-      ${!isUnassigned ? '<button class="nbm-delete-folder">🗑️</button>' : ''}
+      <button class="nbm-select-all" title="Tildar/destildar todos los del folder">☑</button>
+      ${!isUnassigned ? '<button class="nbm-delete-folder" title="Eliminar carpeta">🗑️</button>' : ''}
     `;
 
     const content = document.createElement('div');
     content.className = 'nbm-folder-content';
-    content.style.display = 'none';
+    content.style.display = isOpen ? 'block' : 'none';
 
     sources.forEach(sourceId => {
       const sourceEl = sourceElements.get(sourceId);
@@ -197,9 +201,16 @@
     folder.appendChild(content);
 
     header.querySelector('.nbm-folder-toggle').addEventListener('click', () => {
-      const isOpen = content.style.display === 'block';
-      content.style.display = isOpen ? 'none' : 'block';
-      header.querySelector('.nbm-folder-toggle').textContent = isOpen ? '▶' : '▼';
+      const wasOpen = content.style.display === 'block';
+      content.style.display = wasOpen ? 'none' : 'block';
+      header.querySelector('.nbm-folder-toggle').textContent = wasOpen ? '▶' : '▼';
+      if (wasOpen) openFolders.delete(name); else openFolders.add(name);
+    });
+
+    // Botón "tildar/destildar todos del folder"
+    header.querySelector('.nbm-select-all').addEventListener('click', e => {
+      e.stopPropagation();
+      toggleSelectionInFolder(name);
     });
 
     if (!isUnassigned) {
@@ -289,8 +300,53 @@
     } else if (folderStructure.folders[targetFolderName]) {
       folderStructure.folders[targetFolderName].push(sourceId);
     }
+    // mantener abiertos el folder destino y los que ya estaban abiertos
+    openFolders.add(targetFolderName);
     saveStructure();
     refreshUI();
+  }
+
+  // Encuentra el .single-source-container ORIGINAL (no clones) para un sourceId dado
+  function findOriginalContainer(sourceId) {
+    const all = document.querySelectorAll(SOURCE_ITEM_SELECTOR);
+    for (const el of all) {
+      if (el.closest('#nbm-folders-container')) continue;
+      const btn = el.querySelector('button[aria-label]');
+      if (btn && btn.getAttribute('aria-label') === sourceId) return el;
+    }
+    return null;
+  }
+
+  // Encuentra el checkbox dentro del container original y devuelve su estado + función para clicarlo
+  function getCheckboxInfo(originalEl) {
+    const checkboxEl = originalEl.querySelector('[role="checkbox"]') ||
+                       originalEl.querySelector('mat-checkbox') ||
+                       originalEl.querySelector('input[type="checkbox"]');
+    if (!checkboxEl) return null;
+    const checked = checkboxEl.getAttribute('aria-checked') === 'true' || checkboxEl.checked === true;
+    const clickable = checkboxEl.querySelector('button, input, [role="button"]') || checkboxEl;
+    return { checked, click: () => clickable.click() };
+  }
+
+  // Tildar todos los del folder, o destildar si todos ya están tildados
+  function toggleSelectionInFolder(folderName) {
+    const sources = folderName === '📥 Sin asignar'
+      ? folderStructure.unassigned
+      : (folderStructure.folders[folderName] || []);
+    const infos = sources.map(id => {
+      const el = findOriginalContainer(id);
+      return el ? { id, info: getCheckboxInfo(el) } : null;
+    }).filter(s => s && s.info);
+
+    if (infos.length === 0) {
+      console.warn('[NBM] No checkboxes found for folder:', folderName);
+      return;
+    }
+    const allChecked = infos.every(s => s.info.checked);
+    console.log(`[NBM] Folder "${folderName}": ${allChecked ? 'destildar' : 'tildar'} ${infos.length} fuentes`);
+    for (const s of infos) {
+      if (allChecked || !s.info.checked) s.info.click();
+    }
   }
 
   function addNewFolder() {
