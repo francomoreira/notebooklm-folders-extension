@@ -1,5 +1,16 @@
 # Changelog — NotebookLM Folders
 
+## v1.6.1 — 2026-05-02
+
+### Bug corregido
+
+**"Vista Lista" mostraba el panel vacío**
+- **Síntoma:** al cliquear "Vista Carpetas" para alternar a "Vista Lista", el área de docs quedaba vacía. La lista original de NotebookLM no aparecía.
+- **Causa:** el `MutationObserver` mantenía la regla "si el contenedor de fuentes está visible, esconderlo". Cuando `toggleView` lo mostraba, el observer lo escondía de vuelta a los pocos ms.
+- **Fix:** flag `listViewMode`. El observer y la inyección idempotente respetan el flag y no esconden la lista cuando el usuario pidió vista lista.
+
+---
+
 ## v1.6 — 2026-05-02
 
 ### Mejoras de UX

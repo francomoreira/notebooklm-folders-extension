@@ -13,6 +13,7 @@
   let dragDropInitialized = false;
   let injecting = false;
   let openFolders = new Set();
+  let listViewMode = false;
 
   function getNotebookId() {
     const match = window.location.pathname.match(/\/notebook\/([^/]+)/);
@@ -85,7 +86,7 @@
 
     const existing = document.getElementById('nbm-folders-container');
     if (existing && existing.dataset.boundTo === getElementPath(sourcesContainer)) {
-      if (sourcesContainer.style.display !== 'none') {
+      if (!listViewMode && sourcesContainer.style.display !== 'none') {
         sourcesContainer.style.display = 'none';
       }
       return true;
@@ -379,14 +380,17 @@
   function toggleView() {
     const wrapper = document.getElementById('nbm-folders-wrapper');
     const original = findSourcesList();
-    if (wrapper.style.display === 'none') {
-      wrapper.style.display = '';
-      if (original) original.style.display = 'none';
-      document.getElementById('nbm-toggle-view').textContent = '📁 Vista Carpetas';
-    } else {
+    listViewMode = !listViewMode;
+    if (listViewMode) {
+      // Vista lista: ocultar carpetas, mostrar lista original
       wrapper.style.display = 'none';
       if (original) original.style.display = '';
       document.getElementById('nbm-toggle-view').textContent = '📋 Vista Lista';
+    } else {
+      // Vista carpetas: mostrar carpetas, ocultar lista original
+      wrapper.style.display = '';
+      if (original) original.style.display = 'none';
+      document.getElementById('nbm-toggle-view').textContent = '📁 Vista Carpetas';
     }
   }
 
@@ -409,7 +413,7 @@
           createFolderUI();
         } else if (ui.dataset.boundTo !== getElementPath(sources)) {
           createFolderUI();
-        } else if (sources.style.display !== 'none') {
+        } else if (!listViewMode && sources.style.display !== 'none') {
           sources.style.display = 'none';
         }
       }, 250);
