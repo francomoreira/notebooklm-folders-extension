@@ -1,40 +1,41 @@
 # 📁 NotebookLM Folders Extension
 
-**Organiza tus fuentes de NotebookLM en carpetas virtuales**
+[![GitHub](https://img.shields.io/badge/GitHub-francomoreira-blue)](https://github.com/francomoreira/notebooklm-folders-extension)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/Version-1.6.2-green.svg)](https://github.com/francomoreira/notebooklm-folders-extension/releases)
+
+> Organiza tus fuentes de NotebookLM en carpetas virtuales — sin backend, sin tracking, 100% local.
+
+---
 
 ## ✨ Features
 
 - 📂 **Carpetas virtuales** - Organiza fuentes en categorías
 - 🎯 **Drag & Drop** - Arrastra fuentes entre carpetas
-- ✏️ **Renombrable** - Haz doble clic en el nombre de carpeta
-- 💾 **Persistente** - Guarda tu estructura en localStorage
+- ✏️ **Renombrable** - Haz clic en el nombre de carpeta para editar
+- 💾 **Persistente** - Guarda tu estructura en localStorage (por cuaderno)
 - 🔄 **Toggle Vista** - Alterna entre vista carpetas y lista original
 - 🚀 **Zero backend** - Solo trabaja a nivel UI/frontend
+- 🔒 **Privacidad total** - No tracking, no analytics, no backend calls
 
 ---
 
-## 🚀 Instalación en Brave
+## 🚀 Instalación
 
-### Método 1: Cargar extensión sin empaquetar
+### Opción 1: Desde Releases (Recomendado)
 
-1. **Abre Brave** y ve a: `brave://extensions/`
+1. **Descargá** el último `.zip` desde [Releases](https://github.com/francomoreira/notebooklm-folders-extension/releases)
+2. **Descomprimí** en una carpeta
+3. En **Brave/Chrome**, andá a: `brave://extensions/` o `chrome://extensions/`
+4. Activá **Modo desarrollador** (toggle arriba a la derecha)
+5. **Cargar extensión sin empaquetar** → Seleccioná la carpeta descomprimida
 
-2. **Activa el modo desarrollador** (toggle arriba a la derecha)
-
-3. **Clic en "Cargar extensión sin empaquetar"**
-
-4. **Selecciona la carpeta** `notebooklm-folders-extension`
-
-5. **¡Listo!** La extensión se activará automáticamente
-
-### Método 2: Instalar como .crx (opcional)
+### Opción 2: Desde código fuente
 
 ```bash
-# Comprimir carpeta
-zip -r notebooklm-folders.zip notebooklm-folders-extension/
-# Renombrar a .crx
-mv notebooklm-folders.zip notebooklm-folders.crx
-# Arrastrar .crx a brave://extensions/
+git clone https://github.com/francomoreira/notebooklm-folders-extension.git
+cd notebooklm-folders-extension
+# Cargar la carpeta en brave://extensions/
 ```
 
 ---
@@ -138,22 +139,38 @@ localStorage["notebooklm_folders_12345"] = {
 
 ---
 
-## 🔒 Privacidad
+## 🤝 Contribuir
 
-- ✅ **Zero tracking**
-- ✅ **Zero analytics**  
-- ✅ **Zero backend calls**
-- ✅ Datos guardados solo en **tu navegador**
-- ✅ No requiere permisos de Drive/Calendar/etc
+¿Encontraste un bug? ¿Tenés una idea?
+
+1. Abrí un [Issue](https://github.com/francomoreira/notebooklm-folders-extension/issues)
+2. Hacé un fork del repo
+3. Creá una branch: `git checkout -b feature/mi-mejora`
+4. Commit: `git commit -m "Add: descripción"`
+5. Push: `git push origin feature/mi-mejora`
+6. Abrí un Pull Request
+
+---
+
+## 🔒 Privacidad & Seguridad
+
+✅ **Zero tracking** — No hay analytics ni telemetría  
+✅ **Zero backend** — No se conecta a ningún servidor  
+✅ **Zero permisos innecesarios** — Solo `storage` y `notebooklm.google.com`  
+✅ **Código público** — Podés auditar cada línea  
+
+**Permisos solicitados:**
+- `storage`: Para guardar tu estructura de carpetas en localStorage
+- `https://notebooklm.google.com/*`: Para inyectar la UI en NotebookLM
 
 ---
 
 ## 🛠️ Stack Técnico
 
-- **Vanilla JavaScript** (sin frameworks)
-- **CSS3** (sin Tailwind para reducir tamaño)
-- **Manifest V3** (compatibilidad futura)
-- **localStorage API** (persistencia)
+- **Vanilla JavaScript** (sin frameworks, ~15KB total)
+- **CSS3** (sin librerías externas)
+- **Manifest V3** (compatible con Chrome/Brave/Edge)
+- **localStorage API** (persistencia local)
 
 ---
 
@@ -174,20 +191,19 @@ localStorage["notebooklm_folders_12345"] = {
 
 ---
 
-## 🤝 Contribuciones
-
-¿Mejoras? Edita directamente los archivos:
-- `content.js` - Lógica principal
-- `styles.css` - Estilos
-- `manifest.json` - Configuración
-
----
-
 ## 📄 Licencia
 
-MIT - Hacé lo que quieras con esto.
+MIT License — Hacé lo que quieras con esto.
+
+Ver [LICENSE](LICENSE) para detalles.
 
 ---
 
-**Creado en 10 minutos por Claude Sonnet 4.5** 🚀  
-*(vs. "40 minutos de IA" según Franco)* 😎
+## 🙏 Créditos
+
+- **Desarrollado con:** Claude Sonnet 4.5 (Anthropic)
+- **Inspiración:** Necesidad personal de organizar materiales del Profesorado en NotebookLM
+
+---
+
+**¿Te sirvió?** Dale ⭐ al repo!
