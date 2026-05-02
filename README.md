@@ -202,7 +202,7 @@ Ver [LICENSE](LICENSE) para detalles.
 ## 🙏 Créditos
 
 - **Desarrollado con:** Claude Sonnet 4.5 (Anthropic)
-- **Inspiración:** Necesidad personal de organizar materiales del Profesorado en NotebookLM
+- **Inspiración:** Necesidad personal de organizar documentos en NotebookLM
 
 ---
 
